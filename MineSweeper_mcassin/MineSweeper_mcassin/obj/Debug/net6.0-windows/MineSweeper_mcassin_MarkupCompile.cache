@@ -1,5 +1,5 @@
 ﻿MineSweeper_mcassin
-1.0.0.0
+
 
 winexe
 C#
@@ -12,7 +12,7 @@ TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\mkath\Documents\GitHub\MineSweeper\MineSweeper_mcassin\MineSweeper_mcassin\App.xaml
 11407045341
 
-7-926557110
+5-1252058844
 194-200944676
 MainWindow.xaml;
 
