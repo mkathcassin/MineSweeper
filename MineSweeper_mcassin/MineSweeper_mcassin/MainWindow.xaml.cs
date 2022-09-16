@@ -23,6 +23,12 @@ namespace MineSweeper_mcassin
         public MainWindow()
         {
             InitializeComponent();
+          
+        }
+
+        private void Asd_Click(object sender, RoutedEventArgs e)
+        {
+           var testGrid = new Grid();
         }
     }
 }

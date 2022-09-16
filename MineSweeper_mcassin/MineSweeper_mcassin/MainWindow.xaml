@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel>
         <Label>Hello World</Label>
-        <Button>Click Me</Button>
+            <Button x:Name="asd" Click="Asd_Click">Debug Button</Button>
         </StackPanel>
     </Grid>
 </Window>

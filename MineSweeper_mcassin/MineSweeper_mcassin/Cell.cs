@@ -13,7 +13,7 @@ namespace MineSweeper_mcassin
         public bool IsFlagged;
         private int xPos;
         private int yPos;
-        private int numMinesTouching;
+        public int numMinesTouching;
 
         public Cell(int x, int y)
         {
