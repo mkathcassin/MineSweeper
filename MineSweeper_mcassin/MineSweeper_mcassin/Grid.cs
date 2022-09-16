@@ -10,7 +10,7 @@ namespace MineSweeper_mcassin
 {
     internal class Grid
     {
-        public int XGridSize =100; //remove values later
+        public int XGridSize = 100; //remove values later
         public int YGridSize = 100;
         public int NumMines = 10;
         public Cell[,] GridCells;
@@ -18,7 +18,7 @@ namespace MineSweeper_mcassin
         public Grid()
         {
             GridCells = new Cell[XGridSize, YGridSize];
-            var mineCoors = randomizeMineLocation().ToList();
+            var mineCoors = randomizeMineLocation();
             //Could probably be done in a cooler way?
             for(int i = 0; i < XGridSize; i++)
             {
@@ -26,16 +26,16 @@ namespace MineSweeper_mcassin
                 {
                     GridCells[i, j] = new Cell(i, j);
                     GridCells[i, j].isMine = mineCoors.Contains((i,j));
-                    GridCells[i, j]. = NumMinesTouching();
+                    GridCells[i, j].numMinesTouching = NumMinesTouching((i,j),mineCoors);
                 }
             }
         }
 
         private List<(int,int)> randomizeMineLocation()
         {
-            Random r = new Random();
-
+            var r = new Random();
             var mineCoordinates = new HashSet<(int,int)>(); //using hashset for unique coordinates
+
             while (mineCoordinates.Count < NumMines) {
                 mineCoordinates.Add((r.Next(0, XGridSize), r.Next(0, YGridSize)));
             }
@@ -43,9 +43,22 @@ namespace MineSweeper_mcassin
             return mineCoordinates.ToList();
         }
 
-        private int NumMinesTouching((int,int) cellCoordinate)
+        private int NumMinesTouching((int,int) cellCoordinate, List<(int, int)> mineCoordinates )
         {
-            return 0;
+            int numTouching = 0;
+            //try surrounding cells
+            //be prepped for outside array
+            // (-1,1)  (0,1)  (1,1)
+            // (-1,0)  (0,0)  (1,0)
+            // (-1,-1) (0,-1) (1,-1)
+
+            //easy but ugly fix this, or this should be a static global function for in game query as well
+            var coorsToCheck = new List<(int, int)>() { (-1, 1), (0, 1), (1, 1), (-1, 0), (1, 0), (-1, -1), (0, -1), (1, -1)};
+            foreach (var coor in coorsToCheck) {
+                numTouching = GridCells[coor.Item1, coor.Item2].isMine ? numTouching++ : numTouching;
+            }
+
+            return numTouching;
         }
     }
 }
