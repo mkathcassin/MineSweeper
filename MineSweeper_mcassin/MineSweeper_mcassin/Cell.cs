@@ -11,8 +11,8 @@ namespace MineSweeper_mcassin
         public bool isVisible;
         public bool isMine;
         public bool IsFlagged;
-        private int xPos;
-        private int yPos;
+        public int xPos;
+        public int yPos;
         public int numMinesTouching;
 
         public Cell(int x, int y)

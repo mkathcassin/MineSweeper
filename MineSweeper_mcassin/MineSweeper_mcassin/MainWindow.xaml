@@ -6,28 +6,19 @@
         xmlns:local="clr-namespace:MineSweeper_mcassin"
         mc:Ignorable="d"
         Title="MineSweeper" Height="Auto" Width="Auto">
-    <Grid >
-        <StackPanel>
-            <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Center">
-                <TextBlock HorizontalAlignment="Left" Margin="4">Number of Mines</TextBlock>
-                <Button x:Name="ResetGrid" HorizontalAlignment="Center"  Margin="4">Reset Grid</Button>
-                <TextBlock HorizontalAlignment="Right"  Margin="4">Timer</TextBlock>
-            </WrapPanel>
-            <WrapPanel>
-                <RadioButton x:Name="RadionButtonEasy" GroupName="Difficulty">Easy</RadioButton>
-                <RadioButton x:Name="RadionButtonMedium" GroupName="Difficulty">Medium</RadioButton>
-                <RadioButton x:Name="RadionButtonHard" GroupName="Difficulty" IsChecked="True">Hard</RadioButton>
-            </WrapPanel>
-            <Button x:Name="CellTest" 
-                    Width="20"
-                    Height="20"
-                    MouseLeftButtonUp="CellTest_MouseLeftButtonUp"></Button>
-            <UniformGrid x:Name="MineGridArea" 
-                     Margin="10"
-                     Background="Gray">
-            </UniformGrid>
-        </StackPanel>
-
-    </Grid>
-   
+    <StackPanel x:Name="RootLayout">
+        <Menu>
+            <MenuItem x:Name="SettingsPanel" Header="Settings" Click="SettingsPanel_Click"></MenuItem>
+        </Menu>
+        <WrapPanel HorizontalAlignment="Center">
+            <TextBlock x:Name="NumMines" HorizontalAlignment="Left" Margin="4"> 000</TextBlock>
+            <Button x:Name="ResetGrid" HorizontalAlignment="Center"  Margin="4">Reset Grid</Button>
+            <TextBlock x:Name="Timer" HorizontalAlignment="Right"  Margin="4">000</TextBlock>
+        </WrapPanel>
+        <WrapPanel HorizontalAlignment="Center">
+            <RadioButton x:Name="RadionButtonEasy" GroupName="Difficulty">Easy</RadioButton>
+            <RadioButton x:Name="RadionButtonMedium" GroupName="Difficulty">Medium</RadioButton>
+            <RadioButton x:Name="RadionButtonHard" GroupName="Difficulty" IsChecked="True">Hard</RadioButton>
+        </WrapPanel>
+    </StackPanel>
 </Window>
