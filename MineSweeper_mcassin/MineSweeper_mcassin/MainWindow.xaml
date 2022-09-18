@@ -11,9 +11,9 @@
             <MenuItem x:Name="SettingsPanel" Header="Settings" Click="SettingsPanel_Click"></MenuItem>
         </Menu>
         <WrapPanel HorizontalAlignment="Center">
-            <TextBlock x:Name="NumMines" HorizontalAlignment="Left" Margin="4"> 000</TextBlock>
-            <Button x:Name="ResetGrid" HorizontalAlignment="Center"  Margin="4">Reset Grid</Button>
-            <TextBlock x:Name="Timer" HorizontalAlignment="Right"  Margin="4">000</TextBlock>
+            <TextBlock x:Name="NumMinesDisplay" HorizontalAlignment="Left" Margin="4"> 000</TextBlock>
+            <Button x:Name="ResetGridButton" Click="ResetGridButton_Click" HorizontalAlignment="Center"  Margin="4">Reset Grid</Button>
+            <TextBlock x:Name="TimerDisplay" HorizontalAlignment="Right"  Margin="4">000</TextBlock>
         </WrapPanel>
         <WrapPanel HorizontalAlignment="Center">
             <RadioButton x:Name="RadionButtonEasy" GroupName="Difficulty">Easy</RadioButton>

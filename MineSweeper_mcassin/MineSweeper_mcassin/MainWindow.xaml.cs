@@ -22,43 +22,35 @@ namespace MineSweeper_mcassin
     /// </summary>
     public partial class MainWindow : Window
     {
+        public int MineGridX = 30; //TODO: get set reasonable range
+        public int MineGridY = 16; //TODO: get set reasonable range
+        public int NumMines = 99; //TODO: get set less than numOfCells-1
+
+        private MineGrid mineGrid;
         public MainWindow()
         {
+            mineGrid = new MineGrid(MineGridX, MineGridY, NumMines);
             InitializeComponent();
-            GenGrid();
+            UpdateGameState();
         }
-        private void GenGrid()
+        private void UpdateGameState()
         {
-            var gridData = new MineGrid(20,20);
-            
-            //This should also be in the MineGrid Class
-            var mineGrid = new UniformGrid();
-            mineGrid.Height = 20 * 20; //replace with Ymax * 20
-            mineGrid.Width = 20 * 20; //replace with Xmax * 20
-            foreach(var cell in gridData.GridCells)
-            {
-                //this should probably live in the Cell Class once we figure this out
-                var cellUI = new Button();
-                cellUI.Height = 20;
-                cellUI.Width = 20;
-                mineGrid.Children.Add(cellUI);
-                Grid.SetColumn(cellUI, cell.xPos);
-                Grid.SetRow(cellUI, cell.yPos);
-                cellUI.Click += CellClicked;
-            }
-            NumMines.Text = gridData.NumMines.ToString();
-            RootLayout.Children.Add(mineGrid);
+            mineGrid = new MineGrid(MineGridX, MineGridY, NumMines);
+            NumMinesDisplay.Text = NumMines.ToString();
+            RootLayout.Children.Add(mineGrid.mineGridUI);
         }
 
         private void SettingsPanel_Click(object sender, RoutedEventArgs e)
         {
 
         }
-        private void CellClicked(object sender, RoutedEventArgs e)
+
+        private void ResetGridButton_Click(object sender, RoutedEventArgs e)
         {
-            var cell = (Button)sender;
-            cell.Background = Brushes.Teal;
+            RootLayout.Children.Remove(mineGrid.mineGridUI);
+            UpdateGameState();
         }
+
     }
 
 }
