@@ -9,10 +9,11 @@
     <StackPanel x:Name="RootLayout">
         <Menu>
             <MenuItem x:Name="SettingsPanel" Header="Settings" Click="SettingsPanel_Click"></MenuItem>
+            <MenuItem x:Name="LeaderBoard" Header="Leader Board" Click="SettingsPanel_Click"></MenuItem>
         </Menu>
         <WrapPanel HorizontalAlignment="Center">
             <TextBlock x:Name="NumMinesDisplay" HorizontalAlignment="Left" Margin="4"> 000</TextBlock>
-            <Button x:Name="ResetGridButton" Click="ResetGridButton_Click" HorizontalAlignment="Center"  Margin="4">Reset Grid</Button>
+            <Button x:Name="ResetGridButton" Click="ResetGridButton_Click" MouseLeftButtonDown="ResetGridButton_MouseLeftButtonDown" HorizontalAlignment="Center"  Margin="4">Reset Grid</Button>
             <TextBlock x:Name="TimerDisplay" HorizontalAlignment="Right"  Margin="4">000</TextBlock>
         </WrapPanel>
         <WrapPanel HorizontalAlignment="Center">

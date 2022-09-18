@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static MineSweeper_mcassin.GameStateManager;
 
 namespace MineSweeper_mcassin
 {
@@ -27,14 +28,17 @@ namespace MineSweeper_mcassin
         public int NumMines = 99; //TODO: get set less than numOfCells-1
 
         private MineGrid mineGrid;
+        private GameStateManager gameState;
         public MainWindow()
         {
             mineGrid = new MineGrid(MineGridX, MineGridY, NumMines);
+            gameState = new GameStateManager();
             InitializeComponent();
             UpdateGameState();
         }
         private void UpdateGameState()
         {
+            gameState = new GameStateManager();
             mineGrid = new MineGrid(MineGridX, MineGridY, NumMines);
             NumMinesDisplay.Text = NumMines.ToString();
             RootLayout.Children.Add(mineGrid.mineGridUI);
@@ -51,6 +55,10 @@ namespace MineSweeper_mcassin
             UpdateGameState();
         }
 
+        private void ResetGridButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Debug.WriteLine("Left button clicked");
+        }
     }
 
 }
