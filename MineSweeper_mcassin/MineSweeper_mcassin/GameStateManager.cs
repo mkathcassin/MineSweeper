@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,31 +21,25 @@ namespace MineSweeper_mcassin
     }
     internal class GameStateManager
     {
-        //win -- all flagged or all visible
-        //lose
-        //Top 10 and all those things
-        public readonly DispatcherTimer timer;
-        public  int timerTime;
-        private int numCorrectFlaggedMines; //if this matches numMines = win
-        private int numVisibleCells; // if this == total number - number of mines = win
-        public GameStateManager()
+        public delegate void GameEvent();
+        public static event GameEvent GameStart, OnGameOver_Win, OnGameOver_Lose;
+
+        public static void TriggerGameEnd(bool winOrLose)
         {
-            timer = new DispatcherTimer();
-            timerTime = 0;
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += Timer_Tick;
+            if (winOrLose)
+            {
+                OnGameOver_Win?.Invoke();
+            }
+            else
+            {
+                OnGameOver_Lose?.Invoke();
+            }
         }
 
-        private void Timer_Tick(object? sender, EventArgs e)
+        public static void TriggerGameStart()
         {
-            timerTime++;
+            GameStart?.Invoke();
         }
-
-        public void GameOver(bool winOrLose)
-        {
-            timer.Stop();
-            //check against list of winners
-            Debug.WriteLine("Game Over");
-        }
+       
     }
 }

@@ -12,24 +12,31 @@ using System.Windows.Input;
 using System.Xml.Serialization;
 using System.Windows.Media;
 using System.Drawing;
+using System.Security.RightsManagement;
 
 namespace MineSweeper_mcassin
 {
     internal class MineGrid
     {
-        public Cell[,] GridCells { get; set; }
+        public Cell[,] GridCells;
         public Grid mineGridUI;
-        private readonly int xGridSize; //TODO: make this get set to clamp range 
-        private readonly int yGridSize; //TODO: make this get set to clamp range
+
+        private readonly int xGridSize;
+        private readonly int yGridSize; 
         private readonly (int, int)[] mineCoors;
+        public int numRevealedCells = 0;
+        public int numCorrectlyFlaggedMines = 0;
+        public int numFlaggedMines = 0;
+        private int numMines;
+
+
         public MineGrid(int x, int y, int numMines)
         {
             xGridSize = x;
             yGridSize = y;
             GridCells = new Cell[xGridSize, yGridSize];
-            
+            this.numMines = numMines;
             mineGridUI = UISetUp();
-            
             mineCoors = randomizeMineLocation(numMines);
             
             //Could probably be done in a cooler way?
@@ -38,19 +45,20 @@ namespace MineSweeper_mcassin
                 for(int j = 0; j < yGridSize; j++)
                 {
                     GridCells[i, j] = new Cell(i, j, mineCoors.Contains((i, j)), NumMinesTouching(i, j), this);
+                    mineGridUI.Children.Add(GridCells[i, j].underText);
+                    mineGridUI.Children.Add(GridCells[i, j].underButton);
                     mineGridUI.Children.Add(GridCells[i, j].cellUI);
+                    
                 }
             }
-
-
-            
+            GameStateManager.OnGameOver_Lose += RevealAllMines;
         }
+
         private Grid UISetUp()
         {
             var grid = new Grid();
             grid.Width = xGridSize * Cell.CellUIDimms;
             grid.Height = yGridSize * Cell.CellUIDimms;
-            
             //TODO: better way to do this?
             for (int i = 0; i < xGridSize; i++)
             {
@@ -112,6 +120,28 @@ namespace MineSweeper_mcassin
                 }
             }
             return coordinates.ToArray();
+        }
+
+        public void RevealAllMines()
+        {
+            foreach(var coor in mineCoors)
+            {
+                mineGridUI.Children.Remove(GridCells[coor.Item1, coor.Item2].cellUI);
+            }
+            foreach(var cell in GridCells)
+            {
+                cell.cellUI.IsEnabled = false;
+            }
+        }
+
+        public void CheckWin()
+        {
+            if(numMines == numCorrectlyFlaggedMines || numRevealedCells == GridCells.Length - numMines)
+            {
+                GameStateManager.TriggerGameEnd(true);
+                Debug.WriteLine("you win");
+            }
+
         }
     }
 }
