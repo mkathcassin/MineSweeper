@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MineSweeper_mcassin"
         mc:Ignorable="d"
-        Title="MineSweeper" MinHeight="200" MinWidth="200">
+        Title="MineSweeper" MinHeight="200" MinWidth="200" SizeToContent="WidthAndHeight">
     <StackPanel x:Name="RootLayout">
         <Menu>
             <MenuItem x:Name="SettingsPanel" Header="Settings" Click="SettingsPanel_Click"></MenuItem>

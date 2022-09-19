@@ -46,8 +46,10 @@ namespace MineSweeper_mcassin
             mineGrid = new MineGrid(MineGridX, MineGridY, NumMines);
             TimerDisplay.Text = "000";
             timerTime = 0;
-            NumMinesDisplay.Text = NumMines.ToString();
+            NumMinesDisplay.Text = NumMines.ToString("000");
             RootLayout.Children.Add(mineGrid.mineGridUI);
+            ResetGridButton.Content= "Reset";
+            ResetGridButton.Background = Brushes.LightGray;
         }
         private DispatcherTimer TimerSetUp()
         {
@@ -115,11 +117,13 @@ namespace MineSweeper_mcassin
         private void ResetButtonUpdate_Win()
         {
             ResetGridButton.Background = Brushes.Green;
+            ResetGridButton.Content = "You Won"; 
         }
 
         private void ResetButtonUpdate_Lose()
         {
             ResetGridButton.Background = Brushes.Red;
+            ResetGridButton.Content = "You Lost";
         }
     }
 
