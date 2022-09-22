@@ -30,7 +30,9 @@ namespace MineSweeper_mcassin
 
         private MineGrid mineGrid;
         private int timerTime = 0;
+        private string difficulty = "Hard";
         private readonly DispatcherTimer timer;
+        private bool gameOver;
         public MainWindow()
         {
             mineGrid = new MineGrid(MineGridX, MineGridY, NumMines);
@@ -48,6 +50,7 @@ namespace MineSweeper_mcassin
             timerTime = 0;
             NumMinesDisplay.Text = NumMines.ToString();
             RootLayout.Children.Add(mineGrid.mineGridUI);
+            gameOver = false;
         }
         private DispatcherTimer TimerSetUp()
         {
@@ -55,8 +58,6 @@ namespace MineSweeper_mcassin
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             GameStart += timer.Start;
-            OnGameOver_Lose += timer.Stop;
-            OnGameOver_Win += timer.Stop;
             return timer;
         }
         private void Timer_Tick(object? sender, EventArgs e)
@@ -84,28 +85,32 @@ namespace MineSweeper_mcassin
         {
             RootLayout.Children.Remove(mineGrid.mineGridUI);
             List<RadioButton> difficultybuttons = new List<RadioButton>() { Easy, Medium, Hard, Custom};
-            var difficulty = difficultybuttons.Find(b => b.IsChecked == true);
-            switch (difficulty.Name)
+            var newDifficulty = difficultybuttons.Find(b => b.IsChecked == true);
+            switch (newDifficulty.Name)
             {
                 case "Easy":
                     MineGridX = 9;
                     MineGridY = 9;
                     NumMines = 10;
+                    difficulty = "Easy";
                     break;
                 case "Medium":
                     MineGridX = 16;
                     MineGridY = 16;
                     NumMines = 40;
+                    difficulty = "Medium";
                     break;
                 case "Hard":
                     MineGridX = 30;
                     MineGridY = 16;
                     NumMines = 99;
+                    difficulty = "Hard";
                     break;
                 case "Custom":
                     MineGridX = Int32.Parse(CustomHeight.Text);
                     MineGridY = Int32.Parse(CustomWidth.Text);
                     NumMines = Int32.Parse(CustomMines.Text);
+                    difficulty = "Custom";
                     break;
             }
             UpdateGameState();
@@ -114,12 +119,29 @@ namespace MineSweeper_mcassin
 
         private void ResetButtonUpdate_Win()
         {
+            if (gameOver) return;
             ResetGridButton.Background = Brushes.Green;
+            
+            timer.Stop();
+           
+            if(CompareLeaderBoard(timerTime, difficulty))
+            {
+                //remove and add to pop up functionality
+                WriteJson(new Winner() {
+                UserName = "Mary",
+                Difficulty = difficulty,
+                Time = timerTime,
+                });
+            }
+            gameOver = true;
         }
 
         private void ResetButtonUpdate_Lose()
         {
+            if (gameOver) return;
             ResetGridButton.Background = Brushes.Red;
+            timer.Stop();
+            gameOver = true;
         }
     }
 

@@ -59,6 +59,7 @@ namespace MineSweeper_mcassin
             var grid = new Grid();
             grid.Width = xGridSize * Cell.CellUIDimms;
             grid.Height = yGridSize * Cell.CellUIDimms;
+            grid.Margin = new Thickness(16);
             //TODO: better way to do this?
             for (int i = 0; i < xGridSize; i++)
             {

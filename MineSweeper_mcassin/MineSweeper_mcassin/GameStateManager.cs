@@ -9,15 +9,22 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MineSweeper_mcassin
-{
-    internal class WinnerJSON
+{   
+    internal class Winner
     {
-        public string UserNames;
-        public string Difficulty;
-        public int Time;
-        public int Ranking;
+        [JsonPropertyName("Difficulty")]
+        public string? Difficulty { get; set; }
+        
+        [JsonPropertyName("Time")]
+        public int Time { get; set; }
+        
+        [JsonPropertyName("UserName")]
+        public string? UserName { get; set; }
     }
     internal class GameStateManager
     {
@@ -40,6 +47,47 @@ namespace MineSweeper_mcassin
         {
             GameStart?.Invoke();
         }
-       
+
+        private static List<Winner>? ReadJson()
+        {
+            string json = File.ReadAllText("MineSweeperTop10.json");
+            var board = new List<Winner>();
+            if (json.Length > 10)
+            {
+                board = JsonSerializer.Deserialize<List<Winner>>(json);
+            }
+            
+            return board;
+        }
+
+        //could probably write a custom comparer for this?
+        public static bool CompareLeaderBoard(int time, string difficulty)
+        {
+            if (ReadJson().FindAll(w => w.Difficulty == difficulty).Count < 10) return true;
+
+            //creates ordered subBoard
+            var localLeaderBoard = ReadJson().FindAll(w => w.Difficulty == difficulty).OrderBy(w => w.Time);
+            
+            foreach(var winner in localLeaderBoard)
+            {
+                if (winner.Time > time) return true;
+            }
+
+            return false;   
+        }
+
+        public static void WriteJson(Winner newWinner)
+        {
+            var newLeaderBoard = ReadJson();
+            var localLeaderBoard = newLeaderBoard.FindAll(w => w.Difficulty == newWinner.Difficulty);
+            if ( localLeaderBoard.Count >= 10)
+            {
+                newLeaderBoard.Remove(newLeaderBoard.FindAll(w => w.Difficulty == newWinner.Difficulty).Last());
+            }
+            newLeaderBoard.Add(newWinner);
+            newLeaderBoard.OrderBy(w => w.Time).ThenBy(w => w.Difficulty);
+            var json = JsonSerializer.Serialize(newLeaderBoard);
+            File.WriteAllText("MineSweeperTop10.json", json);
+        }
     }
 }
