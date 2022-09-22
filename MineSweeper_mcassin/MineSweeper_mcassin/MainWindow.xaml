@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MineSweeper_mcassin"
         mc:Ignorable="d"
-        Title="MineSweeper" MinHeight="200" MinWidth="200" SizeToContent="WidthAndHeight">
+        Title="MineSweeper" SizeToContent="WidthAndHeight" MinHeight="100" MinWidth="100">
     <StackPanel x:Name="RootLayout">
         <Menu>
             <MenuItem x:Name="SettingsPanel" Header="Settings" Click="SettingsPanel_Click"></MenuItem>
@@ -35,17 +35,17 @@
                     <RadioButton x:Name="Medium" GroupName="Difficulty" Grid.Row="3" Grid.Column="0" Margin="5">Medium</RadioButton>
                     <RadioButton x:Name="Hard" GroupName="Difficulty" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="5">Hard</RadioButton>
                     <RadioButton x:Name="Custom" GroupName="Difficulty" Grid.Row="5" Grid.Column="0" Margin="5">Custom</RadioButton>
-                    <TextBlock Grid.Row="1" Grid.Column="1">Height</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="2">Width</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="1">Width</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="2">Height</TextBlock>
                     <TextBlock Grid.Row="1" Grid.Column="3">Mines</TextBlock>
-                    <TextBlock Grid.Row="2" Grid.Column="2" x:Name="EasyWidth" TextAlignment="Center">9</TextBlock>
-                    <TextBlock Grid.Row="3" Grid.Column="2" x:Name="MediumWidth" TextAlignment="Center">16</TextBlock>
-                    <TextBlock Grid.Row="4" Grid.Column="2" x:Name="ExpertWidth" TextAlignment="Center">16</TextBlock>
-                    <TextBox Grid.Row="5" Grid.Column="2" x:Name= "CustomWidth"  Margin="5">20</TextBox>
-                    <TextBlock  Grid.Row="2" Grid.Column="1" x:Name="EasyHeight" TextAlignment="Center">9</TextBlock>
-                    <TextBlock  Grid.Row="3" Grid.Column="1" x:Name="MediumHeight" TextAlignment="Center">16</TextBlock>
-                    <TextBlock  Grid.Row="4" Grid.Column="1" x:Name="ExpertHeight" TextAlignment="Center">30</TextBlock>
-                    <TextBox  Grid.Row="5" Grid.Column="1" x:Name= "CustomHeight" Margin="5">20</TextBox>
+                    <TextBlock Grid.Row="2" Grid.Column="2" x:Name="EasyHeight" TextAlignment="Center">9</TextBlock>
+                    <TextBlock Grid.Row="3" Grid.Column="2" x:Name="MediumHeight" TextAlignment="Center">16</TextBlock>
+                    <TextBlock Grid.Row="4" Grid.Column="2" x:Name="ExpertHeight" TextAlignment="Center">16</TextBlock>
+                    <TextBox Grid.Row="5" Grid.Column="2" x:Name= "CustomHeight"  Margin="5">20</TextBox>
+                    <TextBlock  Grid.Row="2" Grid.Column="1" x:Name="EasyWidth" TextAlignment="Center">9</TextBlock>
+                    <TextBlock  Grid.Row="3" Grid.Column="1" x:Name="MediumWidth" TextAlignment="Center">16</TextBlock>
+                    <TextBlock  Grid.Row="4" Grid.Column="1" x:Name="ExpertWidth" TextAlignment="Center">30</TextBlock>
+                    <TextBox  Grid.Row="5" Grid.Column="1" x:Name= "CustomWidth" Margin="5">20</TextBox>
                     <TextBlock  Grid.Row="2" Grid.Column="3" x:Name="EasyNumMines" TextAlignment="Center">10</TextBlock>
                     <TextBlock  Grid.Row="3" Grid.Column="3" x:Name="MediumNumMines" TextAlignment="Center">40</TextBlock>
                     <TextBlock  Grid.Row="4" Grid.Column="3" x:Name="ExpertNumMines" TextAlignment="Center">99</TextBlock>
