@@ -4,61 +4,45 @@
              xmlns:local="clr-namespace:MineSweeper_mcassin"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <RadialGradientBrush x:Key="DarkPurpleGreenGradientBrush" GradientOrigin="0.5,0.5">
-            <GradientStop Color="#391730" Offset="0"></GradientStop>
-            <GradientStop Color="#a8c430" Offset="20"></GradientStop>
-        </RadialGradientBrush>
-        <Style x:Key="CellFocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Control}">
-                        <Grid Margin="3 2">
-                            <Rectangle Name="r1" StrokeThickness="1" Stroke="Black" StrokeDashArray="2 2"/>
-                            <Border Name="border" Width="{TemplateBinding ActualWidth}" Height="{TemplateBinding ActualHeight}"  CornerRadius="2" BorderThickness="1" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        
+        <SolidColorBrush x:Key="MSBeige">#f2daac</SolidColorBrush>
+        <SolidColorBrush x:Key="MSLightYellow">#f2cd88</SolidColorBrush>
+        <SolidColorBrush x:Key="MSYellow">#f2be5d</SolidColorBrush>
+        <SolidColorBrush x:Key="MSBrightYellow">#f2b441</SolidColorBrush>
+        <SolidColorBrush x:Key="MSOrange">#bf5e3b</SolidColorBrush>
+        <SolidColorBrush x:Key="MSRed">#bf544b</SolidColorBrush>
+        <SolidColorBrush x:Key="MSBlack">#0d0d0d</SolidColorBrush>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource MSBeige}"></Setter>
+            <Setter Property="Foreground" Value="{StaticResource MSBlack}"></Setter>
         </Style>
-        <Style x:Key="CellButton" TargetType="Button">
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="40"/>
-            <Setter Property="Background" Value="purple"/>
-            <Setter Property="Content">
-                <Setter.Value>
-                    <Image Source="Images\CellUnclicked.png"></Image>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Visibility" Value="Visible"/>
-            <Setter Property="FocusVisualStyle" Value="{StaticResource CellFocusVisual}"/>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource MSBeige }"></Setter>
+            <Setter Property="BorderBrush" Value="{StaticResource MSLightYellow }"></Setter>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="border" 
-        				BorderThickness="1" 
-        				BorderBrush="DarkGray" 
-        				Background="{TemplateBinding Background}">
-                            <Grid >
-                                <ContentPresenter HorizontalAlignment="Center" 
-                                    VerticalAlignment="Center" Name="content"/>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2.5">
+                            <Grid>
+                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
                             </Grid>
                         </Border>
+
                         <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource MSLightYellow}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource MSOrange}" />
+                            </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" Value="{StaticResource DarkPurpleGreenGradientBrush}"></Setter>
-                                <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                                <Setter Property="Background" Value="{StaticResource MSBeige}"></Setter>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="Timer">
-            
-        </Style>
-        
-        
-
     </Application.Resources>
 </Application>

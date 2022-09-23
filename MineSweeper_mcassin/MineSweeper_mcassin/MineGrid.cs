@@ -2,20 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Automation.Peers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using System.Xml.Serialization;
-using System.Windows.Media;
-using System.Drawing;
-using System.Security.RightsManagement;
 
 namespace MineSweeper_mcassin
 {
+    /// <summary>
+    /// This generates the board per new game within the app, randomly generates and stores mine location, tracks and checks for win state
+    /// </summary>
     internal class MineGrid
     {
         public Cell[,] GridCells;
@@ -24,12 +18,12 @@ namespace MineSweeper_mcassin
         private readonly int xGridSize;
         private readonly int yGridSize; 
         private readonly (int, int)[] mineCoors;
+        private readonly int numMines;
+
         public int numRevealedCells = 0;
         public int numCorrectlyFlaggedMines = 0;
         public int numFlaggedMines = 0;
-        private int numMines;
-
-
+        
         public MineGrid(int x, int y, int numMines)
         {
             xGridSize = x;
@@ -39,16 +33,14 @@ namespace MineSweeper_mcassin
             mineGridUI = UISetUp();
             mineCoors = randomizeMineLocation(numMines);
             
-            //Could probably be done in a cooler way?
             for(int i = 0; i < xGridSize; i++)
             {
                 for(int j = 0; j < yGridSize; j++)
                 {
                     GridCells[i, j] = new Cell(i, j, mineCoors.Contains((i, j)), NumMinesTouching(i, j), this);
-                    mineGridUI.Children.Add(GridCells[i, j].underText);
+                    mineGridUI.Children.Add(GridCells[i, j].BackGround);
                     mineGridUI.Children.Add(GridCells[i, j].underButton);
                     mineGridUI.Children.Add(GridCells[i, j].cellUI);
-                    
                 }
             }
             GameStateManager.OnGameOver_Lose += RevealAllMines;
@@ -59,6 +51,7 @@ namespace MineSweeper_mcassin
             var grid = new Grid();
             grid.Width = xGridSize * Cell.CellUIDimms;
             grid.Height = yGridSize * Cell.CellUIDimms;
+            grid.Margin = new Thickness(30);
             Grid.SetColumn(grid,1);
             Grid.SetRow(grid,3);
             //TODO: better way to do this?
@@ -107,7 +100,6 @@ namespace MineSweeper_mcassin
         {
             var coordinates = new List<(int,int)>();
 
-            //TODO: this is gross and I should be able to shorten this
             for (int i = -1; i <= 1; i++)
             {
                 var coorX = xCoor + i;

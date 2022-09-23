@@ -1,26 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using static MineSweeper_mcassin.GameStateManager;
 
 namespace MineSweeper_mcassin
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Main window for all interaction within the MineSweeper App
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -39,6 +30,7 @@ namespace MineSweeper_mcassin
             timer = TimerSetUp();
             OnGameOver_Win += ResetButtonUpdate_Win;
             OnGameOver_Lose += ResetButtonUpdate_Lose;
+            CellClicked += CellDownClick;
             InitializeComponent();
             UpdateGameState();
         }
@@ -46,11 +38,16 @@ namespace MineSweeper_mcassin
         {
             timer.Stop();
             mineGrid = new MineGrid(MineGridX, MineGridY, NumMines);
+            
             TimerDisplay.Text = "000";
             timerTime = 0;
+            
             NumMinesDisplay.Text = NumMines.ToString("000");
+            
             RootLayout.Children.Add(mineGrid.mineGridUI);
-            ResetGridButton.Content= new Image() { Source = new BitmapImage(new Uri(Environment.CurrentDirectory + @"\..\..\..\Images\PumpkinNormal.png", UriKind.RelativeOrAbsolute)) }; ;
+            
+            ResetGridButton.Content= new Image() { Source = new BitmapImage(new Uri(Environment.CurrentDirectory + @"\..\..\..\Images\PumpkinNormal.png", UriKind.RelativeOrAbsolute)) };
+            
             gameOver = false;
         }
         private DispatcherTimer TimerSetUp()
@@ -132,7 +129,6 @@ namespace MineSweeper_mcassin
                
             }
 
-
             gameOver = true;
         }
 
@@ -183,6 +179,16 @@ namespace MineSweeper_mcassin
         private void WinnerPopUpClose(object sender, RoutedEventArgs e)
         {
             WinnerPopUp.IsOpen = false;
+        }
+
+        private void CellDownClick()
+        {
+            List<Image> PumkpinImages = new List<Image>() { new Image() { Source = new BitmapImage(new Uri(Environment.CurrentDirectory + @"\..\..\..\Images\PumpkinNormal.png", UriKind.RelativeOrAbsolute)) },
+                                                            new Image() { Source = new BitmapImage(new Uri(Environment.CurrentDirectory + @"\..\..\..\Images\PumpkinMouseDown.png", UriKind.RelativeOrAbsolute)) }};
+
+            var index = PumkpinImages.IndexOf(ResetGridButton.Content as Image);
+            ResetGridButton.Content = index == 1? PumkpinImages[0] : PumkpinImages[1];
+
         }
     }
 

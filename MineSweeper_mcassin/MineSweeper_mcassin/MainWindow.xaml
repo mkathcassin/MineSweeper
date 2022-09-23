@@ -6,51 +6,24 @@
         xmlns:local="clr-namespace:MineSweeper_mcassin"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight" MinHeight="100" MinWidth="100"
-        TextElement.FontFamily="Arial" Background="#3B1731" WindowStyle="SingleBorderWindow" ResizeMode="NoResize">
+        TextElement.Foreground="{StaticResource MSBlack}" Background="{StaticResource MSBeige}" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" FontFamily="MS UI Gothic">
     <Window.Resources>
-        <ControlTemplate x:Key="BorderDisplay">
-            <Grid x:Name="DisplayLayout">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Image Grid.Column="0" Grid.Row="4" Source="/Images/BorderPieces/BL.png"/>
-                <Image Grid.Column="1" Grid.Row="4" Source="/Images/BorderPieces/B.png"/>
-                <Image Grid.Column="2" Grid.Row="4" Source="/Images/BorderPieces/BR.png"/>
-                <Image Grid.Column="1" Grid.Row="2" Source="/Images/BorderPieces/M.png" />
-
-                <Image Grid.Column="0" Grid.Row="1" Source="/Images/BorderPieces/L.png" />
-                <Image Grid.Column="0" Grid.Row="2" Source="/Images/BorderPieces/ML.png" />
-                <Image Grid.Column="0" Grid.Row="3" Source="/Images/BorderPieces/L.png" />
-
-                <Image Grid.Column="2" Grid.Row="1" Source="/Images/BorderPieces/R.png" />
-                <Image Grid.Column="2" Grid.Row="2" Source="/Images/BorderPieces/MR.png" />
-                <Image Grid.Column="2" Grid.Row="3" Source="/Images/BorderPieces/R.png" />
-
-                <Image Grid.Column="0" Grid.Row="0" Source="/Images/BorderPieces/TL.png" />
-                <Image Grid.Column="1" Grid.Row="0" Source="/Images/BorderPieces/T.png" />
-                <Image Grid.Column="2" Grid.Row="0" Source="/Images/BorderPieces/TR.png"/>
-            </Grid>
-        </ControlTemplate>
+        <Style x:Key="OtherButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource MSYellow}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
     </Window.Resources>
     <StackPanel x:Name="RootLayout">
-        <Menu Background="#3B1731">
+        <Menu Background= "{StaticResource MSLightYellow}" FontSize="20">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <DockPanel HorizontalAlignment="Stretch"/>
+                    <DockPanel Margin="10" HorizontalAlignment="Stretch"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
-            <MenuItem x:Name="SettingsPanel" Header="Settings" Click="SettingsPanel_Click" Foreground="#9880a2"></MenuItem>
-            <Popup x:Name="settingsPopUp" Width="300" Height="300">
+            <MenuItem x:Name="SettingsPanel" Header="Settings" Click="SettingsPanel_Click" FontFamily="MS UI Gothic"></MenuItem>
+            <Popup x:Name="settingsPopUp" Width="Auto" Height="Auto" PlacementTarget="{Binding ElementName=SettingsPanel}" Placement="Bottom">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"></RowDefinition>
@@ -67,18 +40,17 @@
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Rectangle Grid.ColumnSpan="4" Fill="LightGray"></Rectangle>
-                    <Rectangle Grid.ColumnSpan="4" Grid.Row="6" Fill="LightGray"></Rectangle>
-                    <Rectangle Grid.ColumnSpan="4" Grid.RowSpan="5" Grid.Row="1" Fill="White"></Rectangle>
+                    <Rectangle Grid.ColumnSpan="4" Fill="{StaticResource MSLightYellow}"></Rectangle>
+                    <Rectangle Grid.ColumnSpan="4" Grid.RowSpan="6" Grid.Row="1" Fill="{StaticResource MSBeige}"></Rectangle>
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="5">Settings</TextBlock>
-                    <Button x:Name="PopUpClose" Grid.Row="0" Grid.Column="4" Click="SettingsPanel_Click">Exit</Button>
+                    <Button Style="{StaticResource OtherButton}" x:Name="PopUpClose" Grid.Row="0" Grid.Column="4" Click="SettingsPanel_Click">Exit</Button>
                     <RadioButton x:Name="EasyDiff" GroupName="Difficulty" Grid.Row="2" Grid.Column="0" Margin="5">Easy</RadioButton>
                     <RadioButton x:Name="MediumDiff" GroupName="Difficulty" Grid.Row="3" Grid.Column="0" Margin="5">Medium</RadioButton>
                     <RadioButton x:Name="HardDiff" GroupName="Difficulty" IsChecked="True" Grid.Row="4" Grid.Column="0" Margin="5">Hard</RadioButton>
                     <RadioButton x:Name="CustomDiff" GroupName="Difficulty" Grid.Row="5" Grid.Column="0" Margin="5">Custom</RadioButton>
-                    <TextBlock Grid.Row="1" Grid.Column="1">Width</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="2">Height</TextBlock>
-                    <TextBlock Grid.Row="1" Grid.Column="3">Mines</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="4">Width</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Margin="4">Height</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="3" Margin="4">Mines</TextBlock>
                     <TextBlock Grid.Row="2" Grid.Column="2" x:Name="EasyHeight" TextAlignment="Center">9</TextBlock>
                     <TextBlock Grid.Row="3" Grid.Column="2" x:Name="MediumHeight" TextAlignment="Center">16</TextBlock>
                     <TextBlock Grid.Row="4" Grid.Column="2" x:Name="ExpertHeight" TextAlignment="Center">16</TextBlock>
@@ -91,15 +63,16 @@
                     <TextBlock  Grid.Row="3" Grid.Column="3" x:Name="MediumNumMines" TextAlignment="Center">40</TextBlock>
                     <TextBlock  Grid.Row="4" Grid.Column="3" x:Name="ExpertNumMines" TextAlignment="Center">99</TextBlock>
                     <TextBox  Grid.Row="5" Grid.Column="3" x:Name="CustomMines" TextAlignment="Center"  Margin="5">100</TextBox>
-                    <Button  Margin="5" Grid.Row="6" Grid.Column="0" Click="DifficultyChanged">New Game</Button>
+                    <Button Style="{StaticResource OtherButton}"  Margin="5" Grid.Row="6" Grid.Column="3" Click="DifficultyChanged">New Game</Button>
                 </Grid>
             </Popup>
-            <MenuItem x:Name="LeaderBoard" Header="Leader Board" Click="LeaderBoard_Click" Foreground="#9880a2"/>
-            <Popup x:Name="LeaderBoardPopUp">
+            <MenuItem x:Name="LeaderBoard" Header="Leader Board" Click="LeaderBoard_Click"/>
+            <Popup x:Name="LeaderBoardPopUp" PlacementTarget="{Binding ElementName=LeaderBoard}" Placement="Bottom">
                 <Grid>
-                    <Rectangle Fill="White"></Rectangle>
-                    <StackPanel>
-                        <Button HorizontalAlignment="Right" Click="LeaderBoard_Click">Exit</Button>
+                    <Rectangle Fill="{StaticResource MSBeige}"></Rectangle>
+                    
+                    <StackPanel  Margin="10">
+                        <Button x:Name="LBExitButton" Style="{StaticResource OtherButton}" Margin="5" HorizontalAlignment="Right" Click="LeaderBoard_Click">Exit</Button>
                         <StackPanel x:Name="LBDifficultyOptions" Orientation="Horizontal" Margin="8">
                             <RadioButton Margin ="5" x:Name="Easy" GroupName="LeaderBoardDifficulty" Click="LeaderBoardDifficultyChange">Easy</RadioButton>
                             <RadioButton Margin ="5" x:Name="Medium" GroupName="LeaderBoardDifficulty" Click="LeaderBoardDifficultyChange" >Medium</RadioButton>
@@ -115,7 +88,7 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" Margin="4">
-                                        <TextBlock Margin ="5" Text="{Binding Ranking}" HorizontalAlignment="Left"></TextBlock>
+                                        <TextBlock Margin ="5" FontWeight="Bold" Foreground="{StaticResource MSOrange}" Text="{Binding Ranking}" HorizontalAlignment="Left"></TextBlock>
                                         <TextBlock Margin ="5" Text="{Binding UserName}" HorizontalAlignment="Center"></TextBlock>
                                         <TextBlock Margin ="5" Text="{Binding Time}" HorizontalAlignment="Right"></TextBlock>
                                     </StackPanel>
@@ -125,31 +98,29 @@
                     </StackPanel>
                 </Grid>
             </Popup>
-            <MenuItem x:Name="Exit" Header="Exit" Foreground="#9880a2" Click="Exit_Click" HorizontalAlignment="Right"/>
+            <MenuItem x:Name="Exit" Header="Exit" Click="Exit_Click" HorizontalAlignment="Right"/>
         </Menu>
-        <Grid ></Grid>
-        <Grid Margin="24,20,24,24" Grid.Column="1" Grid.Row="1">
+        <Grid Grid.Column="1" Grid.Row="1" Margin="54,24,54,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Rectangle Fill="#291730" Grid.Column="0"/>
-            <TextBlock x:Name="NumMinesDisplay" Foreground="#FF6800" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="36" Margin="8"><Run Text="000"/></TextBlock>
-            <Button x:Name="ResetGridButton" Width="100"  Click="ResetGridButton_Click" Margin="4"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#391730">
+            
+            <TextBlock x:Name="NumMinesDisplay" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="36" Margin="4" FontFamily="MS UI Gothic"><Run Text="000"/></TextBlock>
+            <Button x:Name="ResetGridButton" Width="100" Click="ResetGridButton_Click" Margin="4"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Image Source="Images/PumpkinNormal.png"/>
             </Button>
-            <Rectangle Fill="#291730" Grid.Column="2"/>
-            <TextBlock x:Name="TimerDisplay" HorizontalAlignment="Right" Foreground="#FF6800" Grid.Column="2" VerticalAlignment="Center" FontSize="36"  Margin="8"><Run Text="000"/></TextBlock>
+            <TextBlock x:Name="TimerDisplay" HorizontalAlignment="Right" Grid.Column="2" VerticalAlignment="Center" FontSize="36"  Margin="4" FontFamily="MS UI Gothic"><Run Text="000"/></TextBlock>
         </Grid>
-        <Popup x:Name="WinnerPopUp">
+        <Popup x:Name="WinnerPopUp" Height="Auto" Width="Auto" Placement="Center" PlacementTarget="{Binding ElementName=RootLayout}">
             <Grid>
-                <Rectangle Fill="AntiqueWhite"></Rectangle>
-                <StackPanel Margin="20">
-                    <Button HorizontalAlignment="Right" Click="WinnerPopUpClose"  VerticalAlignment="Top">Exit</Button>
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Congrats your Made it in the Top 10!</TextBlock>
-                    <TextBox x:Name="UserNameInput" HorizontalAlignment="Center" VerticalAlignment="Center">Your Name Here</TextBox>
-                    <Button x:Name="AcceptName" Click="AcceptName_Click">Submit</Button>
+                <Rectangle Fill="{StaticResource MSBeige}"></Rectangle>
+                <StackPanel>
+                    <Button  Style="{StaticResource OtherButton}" HorizontalAlignment="Right" Click="WinnerPopUpClose"  VerticalAlignment="Top">Exit</Button>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="24" Margin="8">Congrats your Made it in the Top 10!</TextBlock>
+                    <TextBox x:Name="UserNameInput" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="8" FontSize="24"> Your Name Here</TextBox>
+                    <Button  Style="{StaticResource OtherButton}" x:Name="AcceptName" Click="AcceptName_Click" Margin="8">Submit</Button>
                 </StackPanel>
             </Grid>
         </Popup>

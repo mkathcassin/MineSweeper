@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Threading;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Windows;
 
 namespace MineSweeper_mcassin
-{   internal class DifficultyTop10
+{
+    /// <summary>
+    /// Class to Deserialize Winners LeaderBoard 
+    /// </summary>
+    internal class DifficultyTop10
     {
         [JsonPropertyName("Difficulty")]
         public string? Difficulty { get; set; }
@@ -22,6 +18,9 @@ namespace MineSweeper_mcassin
         [JsonPropertyName("Winners")]
         public List<Winner>? Winners { get; set; }
     }
+    /// <summary>
+    /// Class to Deserialize indivdual Users
+    /// </summary>
     internal class Winner
     {
         [JsonPropertyName("Time")]
@@ -33,10 +32,13 @@ namespace MineSweeper_mcassin
         [JsonPropertyName("Ranking")]
         public int Ranking { get; set; }
     }
+    /// <summary>
+    /// Class to track the state of app as well as reading in and writing JSON
+    /// </summary>
     internal class GameStateManager
     {
         public delegate void GameEvent();
-        public static event GameEvent GameStart, OnGameOver_Win, OnGameOver_Lose;
+        public static event GameEvent? GameStart, CellClicked, OnGameOver_Win, OnGameOver_Lose;
 
         public static void TriggerGameEnd(bool winOrLose)
         {
@@ -55,6 +57,11 @@ namespace MineSweeper_mcassin
             GameStart?.Invoke();
         }
 
+        public static void TriggerCellClicked()
+        {
+            CellClicked?.Invoke();
+        }
+
         public static List<Winner> ReadJson(string difficulty)
         {
             string json = File.ReadAllText("MineSweeperTop10.json");
@@ -69,7 +76,7 @@ namespace MineSweeper_mcassin
             return local10;
         }
 
-        //could probably write a custom comparer for this?
+        // Checks if Top 10 win has been achieved
         public static bool CompareLeaderBoard(int time, string difficulty)
         {
 
@@ -91,12 +98,13 @@ namespace MineSweeper_mcassin
             localTop10 = localTop10.OrderBy(w => w.Time).ToList();
             localTop10.RemoveAll(w => localTop10.IndexOf(w) > 9);
 
-            //Adding Ranking
+            //Adding Ranking to Winner
             for (int i = 0; i < 10; i++)
             {
                 localTop10[i].Ranking = i;
             }
 
+            //check for incomplete JSON
             if (!fullLeaderBoard.ContainsKey(difficulty))
             {
                 fullLeaderBoard.Add(difficulty, new List<Winner>());
@@ -108,7 +116,7 @@ namespace MineSweeper_mcassin
             File.WriteAllText("MineSweeperTop10.json", json);
         }
 
-        //method to clean up if anything happens to the json file
+        //Method to clean up if json file is in complete
         private static List<Winner> FixJsonFile(List<Winner>? brokenJson)
         {
             brokenJson = brokenJson != null ? brokenJson : new List<Winner>();
