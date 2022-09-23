@@ -59,7 +59,8 @@ namespace MineSweeper_mcassin
             var grid = new Grid();
             grid.Width = xGridSize * Cell.CellUIDimms;
             grid.Height = yGridSize * Cell.CellUIDimms;
-            grid.Margin = new Thickness(16);
+            Grid.SetColumn(grid,1);
+            Grid.SetRow(grid,3);
             //TODO: better way to do this?
             for (int i = 0; i < xGridSize; i++)
             {
@@ -128,10 +129,6 @@ namespace MineSweeper_mcassin
             foreach(var coor in mineCoors)
             {
                 mineGridUI.Children.Remove(GridCells[coor.Item1, coor.Item2].cellUI);
-            }
-            foreach(var cell in GridCells)
-            {
-                cell.cellUI.IsEnabled = false;
             }
         }
 

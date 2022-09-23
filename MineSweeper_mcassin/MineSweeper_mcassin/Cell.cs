@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Printing;
+using System.Runtime.Versioning;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,13 +12,14 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace MineSweeper_mcassin
 {
     internal class Cell
     {
-        public static readonly int CellUIDimms = 20;
+        public static readonly int CellUIDimms = 40;
 
         public readonly bool isMine;
         public bool IsFlagged;
@@ -39,6 +41,7 @@ namespace MineSweeper_mcassin
             underButton = UnderSetup();
             underText = GetBackGround();
             mGrid = grid;
+            GameStateManager.OnGameOver_Lose += GameOver;
         }
       
         private Button ButtonUISetUp()
@@ -47,9 +50,12 @@ namespace MineSweeper_mcassin
             {
                 Height = CellUIDimms,
                 Width = CellUIDimms,
+                
             };
+            cell.Style = Application.Current.Resources["CellButton"] as Style; //this isnt working
             cell.Click += Clicked;
             cell.MouseRightButtonDown += Flagged;
+            
             Grid.SetColumn(cell, xPos);
             Grid.SetRow(cell, yPos);
 
@@ -61,7 +67,10 @@ namespace MineSweeper_mcassin
 
             var block = new TextBlock();
             block.Text = numMinesTouching == 0 || isMine ? "" : numMinesTouching.ToString();
+            block.FontSize = 24;
             block.FontWeight = FontWeights.Bold;
+            block.HorizontalAlignment = HorizontalAlignment.Center;
+            block.VerticalAlignment = VerticalAlignment.Center;
             switch (numMinesTouching)
             {
                 case 1:
@@ -112,15 +121,21 @@ namespace MineSweeper_mcassin
         {
             if (!IsFlagged)
             {
-                cellUI.Background = Brushes.Cyan;
+                cellUI.Content = new Image() { Source = new BitmapImage(new Uri(Environment.CurrentDirectory + @"\..\..\..\Images\Candycornflagbackup.png", UriKind.RelativeOrAbsolute)) };
                 mGrid.numFlaggedMines++;
-                mGrid.numCorrectlyFlaggedMines = isMine ? mGrid.numCorrectlyFlaggedMines++ : mGrid.numCorrectlyFlaggedMines;
+                if (isMine)
+                {
+                    mGrid.numCorrectlyFlaggedMines++;
+                }
             }
             else
             {
-                cellUI.Background = Brushes.LightGray;
+                cellUI.Content = "";
                 mGrid.numFlaggedMines--;
-                mGrid.numCorrectlyFlaggedMines = isMine ? mGrid.numCorrectlyFlaggedMines-- : mGrid.numCorrectlyFlaggedMines;
+                if (isMine)
+                {
+                    mGrid.numCorrectlyFlaggedMines--;
+                }
             }
             IsFlagged = !IsFlagged;
             mGrid.CheckWin();
@@ -158,6 +173,11 @@ namespace MineSweeper_mcassin
                     sc.Clicked(this, e); 
                 }
             }
+        }
+
+        private void GameOver()
+        {
+            cellUI.IsEnabled = false;
         }
     }
 }

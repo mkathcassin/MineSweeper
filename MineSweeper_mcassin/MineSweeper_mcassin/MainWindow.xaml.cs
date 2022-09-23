@@ -50,8 +50,7 @@ namespace MineSweeper_mcassin
             timerTime = 0;
             NumMinesDisplay.Text = NumMines.ToString("000");
             RootLayout.Children.Add(mineGrid.mineGridUI);
-            ResetGridButton.Content= "Reset";
-            ResetGridButton.Background = Brushes.LightGray;
+            ResetGridButton.Content= new Image() { Source = new BitmapImage(new Uri(Environment.CurrentDirectory + @"\..\..\..\Images\PumpkinNormal.png", UriKind.RelativeOrAbsolute)) }; ;
             gameOver = false;
         }
         private DispatcherTimer TimerSetUp()
@@ -86,9 +85,9 @@ namespace MineSweeper_mcassin
         private void DifficultyChanged(object sender, RoutedEventArgs e)
         {
             RootLayout.Children.Remove(mineGrid.mineGridUI);
-            List<RadioButton> difficultybuttons = new List<RadioButton>() { Easy, Medium, Hard, Custom};
+            List<RadioButton> difficultybuttons = new List<RadioButton>() { EasyDiff, MediumDiff, HardDiff, CustomDiff};
             var newDifficulty = difficultybuttons.Find(b => b.IsChecked == true);
-            switch (newDifficulty.Name)
+            switch (newDifficulty.Content)
             {
                 case "Easy":
                     MineGridX = 9;
@@ -122,30 +121,68 @@ namespace MineSweeper_mcassin
         private void ResetButtonUpdate_Win()
         {
             if (gameOver) return;
-            ResetGridButton.Background = Brushes.Green;
-            ResetGridButton.Content = "You Won"; 
+            ResetGridButton.Content = new Image() { Source = new BitmapImage(new Uri(Environment.CurrentDirectory + @"\..\..\..\Images\PumpkinWin.png", UriKind.RelativeOrAbsolute))};
             
             timer.Stop();
            
             if(CompareLeaderBoard(timerTime, difficulty))
             {
-                //remove and add to pop up functionality
-                WriteJson(new Winner() {
-                UserName = "Mary",
-                Difficulty = difficulty,
-                Time = timerTime,
-                });
+
+                WinnerPopUp.IsOpen = true;
+               
             }
+
+
             gameOver = true;
         }
 
         private void ResetButtonUpdate_Lose()
         {
             if (gameOver) return;
-            ResetGridButton.Background = Brushes.Red;
-            ResetGridButton.Content = "You Lost";
+            ResetGridButton.Content = new Image() { Source = new BitmapImage(new Uri(Environment.CurrentDirectory + @"\..\..\..\Images\PumpkinGameOver.png", UriKind.RelativeOrAbsolute)) }; ;
             timer.Stop();
             gameOver = true;
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void LeaderBoardDifficultyChange(object sender, RoutedEventArgs e)
+        {
+            var difficulty = (RadioButton)sender;
+            Top10.ItemsSource = ReadJson(difficulty.Name);
+        }
+
+        private void LeaderBoard_Click(object sender, RoutedEventArgs e)
+        {
+            LeaderBoardPopUp.IsOpen = !LeaderBoardPopUp.IsOpen;
+            var rbs = LBDifficultyOptions.Children;
+            foreach (var item in rbs)
+            {
+                var button = (RadioButton)item;
+                if (button.IsChecked == true)
+                {
+                    Top10.ItemsSource = ReadJson(button.Name);
+                    return;
+                }
+            }
+        }
+
+        private void AcceptName_Click(object sender, RoutedEventArgs e)
+        {
+            WriteJson(new Winner()
+            {
+                UserName = UserNameInput.Text,
+                Time = timerTime}, difficulty);
+            WinnerPopUp.IsOpen = false;
+
+        }
+
+        private void WinnerPopUpClose(object sender, RoutedEventArgs e)
+        {
+            WinnerPopUp.IsOpen = false;
         }
     }
 

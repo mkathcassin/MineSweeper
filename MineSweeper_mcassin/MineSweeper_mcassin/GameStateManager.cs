@@ -14,17 +14,24 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace MineSweeper_mcassin
-{   
-    internal class Winner
+{   internal class DifficultyTop10
     {
         [JsonPropertyName("Difficulty")]
         public string? Difficulty { get; set; }
-        
+
+        [JsonPropertyName("Winners")]
+        public List<Winner>? Winners { get; set; }
+    }
+    internal class Winner
+    {
         [JsonPropertyName("Time")]
         public int Time { get; set; }
         
         [JsonPropertyName("UserName")]
         public string? UserName { get; set; }
+
+        [JsonPropertyName("Ranking")]
+        public int Ranking { get; set; }
     }
     internal class GameStateManager
     {
@@ -48,46 +55,70 @@ namespace MineSweeper_mcassin
             GameStart?.Invoke();
         }
 
-        private static List<Winner>? ReadJson()
+        public static List<Winner> ReadJson(string difficulty)
         {
             string json = File.ReadAllText("MineSweeperTop10.json");
-            var board = new List<Winner>();
-            if (json.Length > 10)
+            var leaderBoard = JsonSerializer.Deserialize<Dictionary<string, List<Winner>>>(json);
+            var local10 = new List<Winner>();
+
+            if (!leaderBoard.TryGetValue(difficulty, out local10) || local10.Count < 10)
             {
-                board = JsonSerializer.Deserialize<List<Winner>>(json);
+                local10 = FixJsonFile(local10);
             }
-            
-            return board;
+
+            return local10;
         }
 
         //could probably write a custom comparer for this?
         public static bool CompareLeaderBoard(int time, string difficulty)
         {
-            if (ReadJson().FindAll(w => w.Difficulty == difficulty).Count < 10) return true;
 
-            //creates ordered subBoard
-            var localLeaderBoard = ReadJson().FindAll(w => w.Difficulty == difficulty).OrderBy(w => w.Time);
-            
-            foreach(var winner in localLeaderBoard)
+            foreach (var winner in ReadJson(difficulty))
             {
                 if (winner.Time > time) return true;
             }
 
-            return false;   
+            return false;
         }
 
-        public static void WriteJson(Winner newWinner)
+        public static void WriteJson(Winner newWinner, string difficulty)
         {
-            var newLeaderBoard = ReadJson();
-            var localLeaderBoard = newLeaderBoard.FindAll(w => w.Difficulty == newWinner.Difficulty);
-            if ( localLeaderBoard.Count >= 10)
+            string json = File.ReadAllText("MineSweeperTop10.json");
+            var fullLeaderBoard = JsonSerializer.Deserialize<Dictionary<string, List<Winner>>>(json);
+            var localTop10 = ReadJson(difficulty);
+
+            localTop10.Add(newWinner);
+            localTop10 = localTop10.OrderBy(w => w.Time).ToList();
+            localTop10.RemoveAll(w => localTop10.IndexOf(w) > 9);
+
+            //Adding Ranking
+            for (int i = 0; i < 10; i++)
             {
-                newLeaderBoard.Remove(newLeaderBoard.FindAll(w => w.Difficulty == newWinner.Difficulty).Last());
+                localTop10[i].Ranking = i;
             }
-            newLeaderBoard.Add(newWinner);
-            newLeaderBoard.OrderBy(w => w.Time).ThenBy(w => w.Difficulty);
-            var json = JsonSerializer.Serialize(newLeaderBoard);
+
+            if (!fullLeaderBoard.ContainsKey(difficulty))
+            {
+                fullLeaderBoard.Add(difficulty, new List<Winner>());
+            }
+
+            fullLeaderBoard[difficulty] = localTop10;
+
+            json = JsonSerializer.Serialize(fullLeaderBoard);
             File.WriteAllText("MineSweeperTop10.json", json);
+        }
+
+        //method to clean up if anything happens to the json file
+        private static List<Winner> FixJsonFile(List<Winner>? brokenJson)
+        {
+            brokenJson = brokenJson != null ? brokenJson : new List<Winner>();
+            
+            for (int i = brokenJson.Count; i < 10; i++)
+            {
+                brokenJson.Add(new Winner() { Time = 999, UserName = "---", Ranking = i+1 });
+            }
+
+            return brokenJson;
         }
     }
 }
